@@ -17,6 +17,15 @@
   		<groupId>com.google.guava</groupId>
   		<artifactId>guava</artifactId>
   	</dependency>
+    <dependency>
+      <groupId>edu.stanford.nlp</groupId>
+      <artifactId>stanford-corenlp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>edu.stanford.nlp</groupId>
+      <artifactId>stanford-corenlp</artifactId>
+      <classifier>models</classifier>
+    </dependency>
   </dependencies>
   <dependencyManagement>
   	<dependencies>
@@ -36,6 +45,17 @@
   			<artifactId>guava</artifactId>
   			<version>17.0</version>
   		</dependency>
+      <dependency>
+	      <groupId>edu.stanford.nlp</groupId>
+	      <artifactId>stanford-corenlp</artifactId>
+	      <version>3.3.1</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>edu.stanford.nlp</groupId>
+	      <artifactId>stanford-corenlp</artifactId>
+	      <version>3.3.1</version>
+	      <classifier>models</classifier>
+	    </dependency>
   	</dependencies>
   </dependencyManagement>
 </project>
