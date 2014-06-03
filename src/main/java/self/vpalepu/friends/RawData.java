@@ -60,14 +60,14 @@ public final class RawData {
     System.out.println(count);
   }
   
-  public Content getSeasonContent(String episodeNumber) {
+  public Content getEpisodeContent(String episodeNumber) {
     String episodeFilePath = 
         textDataStore.getAbsolutePath() + episodeNumber + TEXT; 
     File episodeFile = new File(episodeFilePath);
-    return getSeasonContent(episodeFile);
+    return getEpisodeContent(episodeFile);
   }
   
-  public Content getSeasonContent(File episodeFile) {
+  public Content getEpisodeContent(File episodeFile) {
     BufferedReader episodeReader;
     try {
       episodeReader = new BufferedReader(new FileReader(episodeFile));
@@ -103,6 +103,10 @@ public final class RawData {
     File[] files = textDataStore.listFiles(filter);
     HashMap<String, Content> episodes = new HashMap<>();
     
+    for(File file : files) {
+      episodes.put(file.getName(), getEpisodeContent(file));
+    }
+    
     return episodes;
   }
   
@@ -132,8 +136,4 @@ public final class RawData {
 	  
 		RawData.init(htmlStore, textStore).extractFromHtmlStore();	
 	}
-
-  
-
-	
 }

@@ -24,15 +24,13 @@ public class TextAnalyzer {
   
   public static void main(String[] args) {
     System.out.println(
-        new TextAnalyzer("read some text written by Savitri in Kanpur.")
+        new TextAnalyzer("read some text written by\n Savitri in Kanpur.")
         .analyze());
   }
   
-  private final ArrayList<TextAnalysisResult> results;
   private final String text;
   
   private TextAnalyzer(String text) {
-    results = new ArrayList<>();
     this.text = text;
   }
   
@@ -67,6 +65,9 @@ public class TextAnalyzer {
     List<CoreMap> sentences = document.get(SentencesAnnotation.class);
     
     ArrayList<AnnotatedWord> words = new ArrayList<>();
+    
+    ArrayList<TextAnalysisResult> results = new ArrayList<>();
+    
     for(CoreMap sentence: sentences) {
       for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
         String word = token.get(TextAnnotation.class);
@@ -80,11 +81,11 @@ public class TextAnalyzer {
       SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
       results.add(TextAnalysisResult.create(words, tree, dependencies));
     }
-    return this.results;
+    return results;
   }
   
-  @Override
-  public String toString() {
-    return Joiner.on('\n').join(results);
+  public ArrayList<String> summarize() {
+    // TODO complete this method.
+    return null;
   }
 }
