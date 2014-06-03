@@ -22,6 +22,9 @@ public final class RawData {
   final File htmlDataStore;
   final File textDataStore;
   
+  public static final String TEXT = ".html.txt";
+  public static final String HTML = ".html";
+  
   /**
    * initializes the Raw Data as a composite of a data store for the source
    * html and the text files that contain the parsed text.
@@ -43,7 +46,7 @@ public final class RawData {
       this.textDataStore = textDataStore;
     }
   
-  public void extractFileContents(Scanner source, PrintStream destination) 
+  public void transformFileContents(Scanner source, PrintStream destination) 
       throws IOException {
     String line;
     int count = 0;
@@ -57,6 +60,52 @@ public final class RawData {
     System.out.println(count);
   }
   
+  public Content getSeasonContent(String episodeNumber) {
+    String episodeFilePath = 
+        textDataStore.getAbsolutePath() + episodeNumber + TEXT; 
+    File episodeFile = new File(episodeFilePath);
+    return getSeasonContent(episodeFile);
+  }
+  
+  public Content getSeasonContent(File episodeFile) {
+    BufferedReader episodeReader;
+    try {
+      episodeReader = new BufferedReader(new FileReader(episodeFile));
+    } catch (FileNotFoundException e1) {
+     throw new RuntimeException(e1);
+    }
+    
+    Content episodeContent = Content.init();
+    try {
+      for(String line = episodeReader.readLine();
+          line != null;
+          line = episodeReader.readLine()) {
+        episodeContent.append(line);
+      }
+      episodeReader.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    return episodeContent;
+  }
+  
+  public HashMap<String, Content> getContentForAllEpisodes() {
+    FilenameFilter filter = new FilenameFilter() {
+      
+      @Override
+      public boolean accept(File dir, String name) {
+        if(name.endsWith(TEXT)) 
+          return true;
+        return false;
+      }
+    };
+    File[] files = textDataStore.listFiles(filter);
+    HashMap<String, Content> episodes = new HashMap<>();
+    
+    return episodes;
+  }
+  
   private void extractFromHtmlStore()
       throws FileNotFoundException, IOException {
     final String textDataRoot = this.textDataStore.getAbsolutePath();
@@ -66,7 +115,7 @@ public final class RawData {
       
       String name = htmlFile.getName() + ".txt";
       PrintStream destination = new PrintStream(new File(textDataRoot + name));
-      extractFileContents(source, destination);
+      transformFileContents(source, destination);
     }
   }
   
